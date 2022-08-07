@@ -1,0 +1,4 @@
+enum TimeType {
+  MINUTES,
+  SECONDS,
+}

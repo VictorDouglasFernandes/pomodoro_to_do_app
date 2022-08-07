@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_to_do_app/src/commons/palette.dart';
+import 'package:pomodoro_to_do_app/src/features/home/view/home_page_body.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,39 +13,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
       body: _buildBody(),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      title: const Text(
-        'Pomodoro App Bar',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.grey.shade700,
     );
   }
 
   Widget _buildBody() {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.grey.shade700,
-            Colors.white,
-          ],
-          stops: const [
-            0.0,
-            0.95,
-          ],
-        ),
+      color: Palette.black,
+      child: const SafeArea(
+        child: HomePageBody(),
       ),
     );
   }
