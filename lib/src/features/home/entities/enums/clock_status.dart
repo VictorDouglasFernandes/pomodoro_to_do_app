@@ -1,0 +1,4 @@
+enum ClockType {
+  FOCUS,
+  REST,
+}

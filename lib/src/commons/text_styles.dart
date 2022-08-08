@@ -7,3 +7,10 @@ const TextStyle montserrat84MediumWhite = TextStyle(
   fontWeight: FontWeight.w500,
   color: Palette.white,
 );
+
+const TextStyle montserrat18RegularWhite = TextStyle(
+  fontFamily: 'Montserrat',
+  fontSize: 18.0,
+  fontWeight: FontWeight.w400,
+  color: Palette.white,
+);

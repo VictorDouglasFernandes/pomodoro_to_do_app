@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_to_do_app/src/features/home/view/home_page.dart';
+import 'package:pomodoro_to_do_app/src/features/notification/services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
   runApp(const MyApp());
 }
 
@@ -11,9 +14,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Pomodoro To Do App',
-      home: HomePage(),
+      initialRoute: 'home',
+      routes: {
+        'home': (_) => const HomePage(),
+        //'settings': (_) => const SettingsPage(),
+      },
     );
   }
 }

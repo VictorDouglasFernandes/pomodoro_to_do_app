@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:pomodoro_to_do_app/src/commons/palette.dart';
 import 'package:pomodoro_to_do_app/src/commons/text_styles.dart';
 import 'package:pomodoro_to_do_app/src/features/home/controllers/home_controller.dart';
+import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_status.dart';
 import 'package:pomodoro_to_do_app/src/features/home/entities/enums/time_type.dart';
 
 class HomePageBody extends StatefulWidget {
@@ -23,14 +24,14 @@ class _HomePageBodyState extends State<HomePageBody> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 32.0),
+      padding: const EdgeInsets.all(32.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildConfigureIcon(),
           _buildActionClock(),
-          _buildRestartButton()
+          _buildStateButtons(),
         ],
       ),
     );
@@ -44,9 +45,7 @@ class _HomePageBodyState extends State<HomePageBody> {
           color: Colors.transparent,
           child: InkWell(
             splashColor: Palette.main,
-            onTap: () {
-              print('Settings');
-            },
+            onTap: _onTapConfigureIcon,
             child: const Icon(
               Icons.settings_outlined,
               size: 32.0,
@@ -56,6 +55,10 @@ class _HomePageBodyState extends State<HomePageBody> {
         ),
       ],
     );
+  }
+
+  void _onTapConfigureIcon() {
+    //Navigator.pushNamed(context, 'settings');
   }
 
   Widget _buildActionClock() {
@@ -119,10 +122,13 @@ class _HomePageBodyState extends State<HomePageBody> {
     }
   }
 
-  Widget _buildRestartButton() {
+  Widget _buildStateButtons() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Expanded(
+          child: _buildFocusButton(),
+        ),
         Visibility(
           child: Material(
             color: Colors.transparent,
@@ -137,6 +143,9 @@ class _HomePageBodyState extends State<HomePageBody> {
             ),
           ),
         ),
+        Expanded(
+          child: _buildRestButton(),
+        ),
       ],
     );
   }
@@ -144,5 +153,58 @@ class _HomePageBodyState extends State<HomePageBody> {
   void _onTapRestart() {
     _controller.stopTimer();
     _controller.restartTimer();
+  }
+
+  Widget _buildFocusButton() {
+    return Observer(builder: (_) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: _onTapFocus,
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'FOCUS',
+              style: montserrat18RegularWhite.copyWith(
+                color: _getButtonColor(ClockType.FOCUS),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  Color _getButtonColor(ClockType type) {
+    return Palette.white.withOpacity(_controller.type == type ? 1 : 0.5);
+  }
+
+  void _onTapFocus() {
+    _controller.setType(ClockType.FOCUS);
+  }
+
+  Widget _buildRestButton() {
+    return Observer(builder: (_) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: _onTapRest,
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'REST',
+              style: montserrat18RegularWhite.copyWith(
+                color: _getButtonColor(ClockType.REST),
+              ),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  void _onTapRest() {
+    _controller.setType(ClockType.REST);
   }
 }
