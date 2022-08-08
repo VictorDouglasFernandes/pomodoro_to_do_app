@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:mobx/mobx.dart';
-import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_status.dart';
+import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_type.dart';
 import 'package:pomodoro_to_do_app/src/features/home/entities/enums/time_type.dart';
 import 'package:pomodoro_to_do_app/src/features/notification/services/notification_service.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:pomodoro_to_do_app/src/commons/palette.dart';
 import 'package:pomodoro_to_do_app/src/commons/text_styles.dart';
 import 'package:pomodoro_to_do_app/src/features/home/controllers/home_controller.dart';
-import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_status.dart';
+import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_type.dart';
 import 'package:pomodoro_to_do_app/src/features/home/entities/enums/time_type.dart';
 
 class HomePageBody extends StatefulWidget {
@@ -58,7 +58,7 @@ class _HomePageBodyState extends State<HomePageBody> {
   }
 
   void _onTapConfigureIcon() {
-    //Navigator.pushNamed(context, 'settings');
+    Navigator.pushNamed(context, 'settings');
   }
 
   Widget _buildActionClock() {
