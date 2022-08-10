@@ -18,6 +18,7 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   @override
   void initState() {
+    _controller.getPreviousState();
     super.initState();
   }
 

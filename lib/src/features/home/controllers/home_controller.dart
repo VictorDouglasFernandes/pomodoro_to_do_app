@@ -4,12 +4,23 @@ import 'package:mobx/mobx.dart';
 import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_type.dart';
 import 'package:pomodoro_to_do_app/src/features/home/entities/enums/time_type.dart';
 import 'package:pomodoro_to_do_app/src/features/notification/services/notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'home_controller.g.dart';
 
-class HomeController = HomeControllerBase with _$HomeController;
+class HomeController extends HomeControllerBase with _$HomeController {
+  static final HomeController _singleton = HomeController._internal();
+
+  factory HomeController() {
+    return _singleton;
+  }
+
+  HomeController._internal();
+}
 
 abstract class HomeControllerBase with Store {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   @observable
   int _total = 1500;
 
@@ -44,13 +55,68 @@ abstract class HomeControllerBase with Store {
     restartTimer();
   }
 
-  @action
-  void restartTimer() {
-    _seconds = _total;
+  Future<void> getPreviousState() async {
+    SharedPreferences prefs = await _prefs;
+    String? endString = prefs.getString('endTimer');
+    DateTime? endDate;
+
+    if (endString?.isNotEmpty ?? false) {
+      endDate = DateTime.tryParse(endString!);
+    }
+    int? duration = prefs.getInt('duration');
+
+    bool? active = prefs.getBool('active');
+
+    int? remainingSeconds = prefs.getInt('remainingSeconds');
+
+    if (endDate != null && duration != null) {
+      if (endDate.difference(DateTime.now()).inSeconds > 0) {
+        _setPreviousToCurrentState(
+          endDate: endDate,
+          duration: duration,
+          active: active ?? false,
+          remainingSeconds: remainingSeconds,
+        );
+      }
+    }
   }
 
   @action
-  void startTimer() {
+  void _setPreviousToCurrentState({
+    required DateTime endDate,
+    required int duration,
+    required bool active,
+    int? remainingSeconds,
+  }) {
+    _total = duration;
+    _seconds = endDate.difference(DateTime.now()).inSeconds;
+    if (active) {
+      startTimer(saveData: false);
+    } else {
+      _seconds = remainingSeconds ?? _seconds;
+    }
+
+    // If the duration is greater then the _type is alteady set
+    // to ClockType.FOCUS
+    if (duration == 300) {
+      _type = ClockType.REST;
+    }
+  }
+
+  @action
+  Future<void> restartTimer() async {
+    _seconds = _total;
+    SharedPreferences prefs = await _prefs;
+    prefs.remove('endTimer');
+    prefs.remove('duration');
+    prefs.remove('active');
+  }
+
+  @action
+  void startTimer({bool saveData = true}) {
+    if (saveData) {
+      _saveTimer();
+    }
     _seconds -= 1;
     timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -65,8 +131,12 @@ abstract class HomeControllerBase with Store {
   }
 
   @action
-  void stopTimer() {
+  Future<void> stopTimer() async {
     timer?.cancel();
+
+    SharedPreferences prefs = await _prefs;
+    prefs.setBool('active', false);
+    prefs.setInt('remainingSeconds', _seconds);
   }
 
   void _timerEnd() {
@@ -88,6 +158,16 @@ abstract class HomeControllerBase with Store {
       title: 'Time ended',
       message: _message,
     );
+  }
+
+  Future<void> _saveTimer() async {
+    SharedPreferences prefs = await _prefs;
+    DateTime current = DateTime.now();
+
+    prefs.setString(
+        'endTimer', current.add(Duration(seconds: _total)).toIso8601String());
+    prefs.setInt('duration', _total);
+    prefs.setBool('active', timer?.isActive ?? false);
   }
 
   double percentage() => _seconds / _total;
