@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pomodoro_to_do_app/src/features/home/view/home_page.dart';
 import 'package:pomodoro_to_do_app/src/features/notification/services/notification_service.dart';
 import 'package:pomodoro_to_do_app/src/features/settings/view/settings_page.dart';
@@ -6,6 +7,7 @@ import 'package:pomodoro_to_do_app/src/features/settings/view/settings_page.dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 

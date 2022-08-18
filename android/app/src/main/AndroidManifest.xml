@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pomodoro_to_do_app">
    <application
-        android:label="pomodoro_to_do_app"
+        android:label="Keep Focus"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -16,6 +16,8 @@ class HomePageBody extends StatefulWidget {
 class _HomePageBodyState extends State<HomePageBody> {
   final HomeController _controller = HomeController();
 
+  late Size _size;
+
   @override
   void initState() {
     _controller.getPreviousState();
@@ -24,6 +26,7 @@ class _HomePageBodyState extends State<HomePageBody> {
 
   @override
   Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
@@ -76,8 +79,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                 return Stack(
                   children: [
                     SizedBox(
-                      height: 250,
-                      width: 250,
+                      height: _getClockHeight(),
+                      width: _getClockHeight(),
                       child: CircularProgressIndicator(
                         value: _controller.percentage(),
                         color: Palette.white,
@@ -96,6 +99,9 @@ class _HomePageBodyState extends State<HomePageBody> {
       ],
     );
   }
+
+  double _getClockHeight() =>
+      (_size.height > _size.width ? _size.width : _size.height) * 0.8;
 
   Widget _buildClock() {
     return Column(
