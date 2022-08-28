@@ -117,7 +117,6 @@ abstract class HomeControllerBase with Store {
     if (saveData) {
       _saveTimer();
     }
-    _seconds -= 1;
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
