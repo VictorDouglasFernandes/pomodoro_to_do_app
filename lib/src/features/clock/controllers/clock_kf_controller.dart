@@ -1,24 +1,24 @@
 import 'dart:async';
 
 import 'package:mobx/mobx.dart';
-import 'package:pomodoro_to_do_app/src/features/home/entities/enums/clock_type.dart';
-import 'package:pomodoro_to_do_app/src/features/home/entities/enums/time_type.dart';
+import 'package:pomodoro_to_do_app/src/features/clock/entities/enums/clock_type.dart';
+import 'package:pomodoro_to_do_app/src/features/clock/entities/enums/time_type.dart';
 import 'package:pomodoro_to_do_app/src/features/notification/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'home_controller.g.dart';
+part 'clock_kf_controller.g.dart';
 
-class HomeController extends HomeControllerBase with _$HomeController {
-  static final HomeController _singleton = HomeController._internal();
+class ClockKFController extends ClockKFControllerBase with _$ClockKFController {
+  static final ClockKFController _singleton = ClockKFController._internal();
 
-  factory HomeController() {
+  factory ClockKFController() {
     return _singleton;
   }
 
-  HomeController._internal();
+  ClockKFController._internal();
 }
 
-abstract class HomeControllerBase with Store {
+abstract class ClockKFControllerBase with Store {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   @observable
